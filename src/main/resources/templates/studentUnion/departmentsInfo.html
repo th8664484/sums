@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.w3.org/1999/xhtml">
+<head th:replace="studentUnion/_fragments :: head(~{::title})">
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="../../static/layui/css/layui.css" rel="stylesheet" type="text/css" />
+    <script src="../../static/layui/layui.js" type="text/javascript"></script>
+    <!--方式一 cdn-->
+    <script src="https://cdn.staticfile.org/echarts/4.3.0/echarts.min.js"></script>
+    <script src="../../static/js/chart.js"></script>
+</head>
+<body id="depaInfo">
+<div style="display: flex;">
+    <!-- 图一所占空间 -->
+    <div id="online" style="width: 300px;height:200px;"></div>
+    <!-- 图二所占空间 -->
+    <div id="sex" style="width: 300px;height:200px;"></div>
+    <div style="padding-top: 20px; display: flex;">
+        <table class="layui-table" lay-even lay-skin="nob" lay-size="lg">
+            <colgroup>
+                <col width="100">
+                <col width="150">
+                <col width="100">
+            </colgroup>
+            <tbody th:if="${topTableInfo.get('bz') != null }" th:object="${topTableInfo.get('bz')}">
+            <tr style="height: 53px;">
+                <td>部长</td>
+                <td th:text="*{meName}">2016-11-29</td>
+                <td>
+                    <button class="layui-btn layui-btn-sm layui-bg-blue" id="transition_minister" onclick="transitionMinister()"
+                            shiro:hasPermission="departments:info:transition">换届</button></td>
+            </tr>
+            <tr>
+                <td>学号</td>
+                <td th:text="*{meId}">2016-11-28</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>电话</td>
+                <td th:text="*{tel}">2016-11-28</td>
+                <td></td>
+            </tr>
+            </tbody>
+        </table>
+        <table class="layui-table" lay-even lay-skin="nob" lay-size="lg">
+            <colgroup>
+                <col width="180">
+                <col width="120">
+                <col width="100">
+            </colgroup>
+            <tbody  th:if="${topTableInfo.get('xzx') != null }" th:object="${topTableInfo.get('xzx')}">
+            <tr style="height: 53px;">
+                <td>学生会主席(系)</td>
+                <td th:text="*{meName}">2016-11-29</td>
+                <td>
+<!--                    <button class="layui-btn layui-btn-sm layui-bg-blue" id="faculty-transition" onclick="transitionChairman('2')"-->
+<!--                            shiro:hasPermission="departments:info:transition2">换届</button>-->
+                </td>
+            </tr>
+            <tr>
+                <td>学号</td>
+                <td th:text="*{meId}">2016-11-28</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>电话</td>
+                <td th:text="*{tel}">2016-11-28</td>
+                <td></td>
+            </tr>
+            </tbody>
+        </table>
+        <table class="layui-table" lay-even lay-skin="nob" lay-size="lg">
+            <colgroup>
+                <col width="180">
+                <col width="120">
+                <col width="100">
+            </colgroup>
+            <tbody th:if="${topTableInfo.get('zx') != null }" th:object="${topTableInfo.get('zx')}">
+            <tr style="height: 53px;">
+                <td>学生会主席(校)</td>
+                <td th:text="*{meName}">2016-11-29</td>
+                <td><button class="layui-btn layui-btn-sm layui-bg-blue" id="transition" onclick="transitionChairman('3')"
+                            shiro:hasPermission="departments:info:transition3">换届</button></td>
+            </tr>
+            <tr>
+                <td>学号</td>
+                <td th:text="*{meId}">2016-11-28</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>电话</td>
+                <td th:text="*{tel}">2016-11-28</td>
+                <td></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<table class="layui-hide" id="departmentsInfo" lay-filter="departmentsInfo"></table>
+<script type="text/html" id="toolbarDepaInfo">
+    <form class="layui-form" lay-filter="DepaInfoFomr" id="DepaInfoFomr" >
+        <div class="layui-form-item">
+            <div id="sx" style="display: flex;">
+                <button type="button" class="layui-btn layui-bg-blue" style="margin-right: 10px"
+                        shiro:hasPermission="departments:info:add" onclick="popupwin({tit:'添加成员'},'depaInfo')">添加成员</button>
+                <div class="layui-input-inline">
+                    <input type="text" name="me_id"
+                           placeholder="学号" class="layui-input">
+                </div>
+                <div class="layui-input-inline">
+                    <input type="text" name="me_name" id="studentName"
+                           placeholder="姓名" class="layui-input">
+                </div>
+                <div class="layui-btn-group" style="display: flex;">
+                    <span class="layui-btn  clean" onclick="$('#fileForm')[0].reset()">
+                            <i class="layui-icon layui-icon-refresh-3" ></i> 重置
+                        </span>
+                    <span class="layui-btn  layui-bg-blue change"  data-type="depaInfo" onclick="ConditionsQuery(this)">
+                            <i class="layui-icon layui-icon-search"></i> 查询
+                        </span>
+                </div>
+            </div>
+        </div>
+    </form>
+</script>
+<script type="text/html" id="barDepaInfo">
+    <!--    <a class="layui-btn layui-btn-xs" lay-event="edit"  >编辑</a>-->
+    <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del" shiro:hasPermission="departments:info:del" >
+        <i class="layui-icon">&#xe640;</i> 删除</a>
+</script>
+
+<th:block th:replace="studentUnion/_fragments :: memberAddTemplate"></th:block>
+<form id="transitionChairman" lay-filter="transitionChairman" style="display:none;">
+    <div class="layui-form-item">
+        <label class="layui-form-label" id="candidate-position">候选人</label>
+        <div  class="layui-input-inline" style="display: flex;flex-direction: column;flex-wrap:wrap;height: 225px;">
+            <input type="radio" name="sex" value="0" title="男">
+            <input type="radio" name="sex" value="1" title="女" checked>
+        </div>
+    </div>
+</form>
+<script th:src="@{/js/chart.js}"></script>
+<script th:src="@{/js/select_data.js}"></script>
+</body>
+
+</html>

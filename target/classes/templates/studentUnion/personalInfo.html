@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>个人信息</title>
+    <link href="../../static/layui/css/layui.css" th:href="@{/layui/css/layui.css}" rel="stylesheet" type="text/css" />
+    <script src="../../static/layui/layui.js" th:src="@{/layui/layui.js}" type="text/javascript"></script>
+    <style>
+        body{
+            background-color: #c8c7c7;
+        }
+        .layui-btn{
+            background-color: #1E9FFF;
+        }
+        .menu{
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: space-between; /* 两端对齐 */
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        .menu span{
+            flex-basis: 100%;
+            text-align: center;
+            font-size: 1.5em;
+        }
+        .menu span:nth-child(3){
+            padding:5px 0;
+            height: 35px;
+            line-height: 35px;
+        }
+        .highlighted{
+            border-right: #1E9FFF 3px solid;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-container">
+    <div class="layui-row" style="margin-top: 100px;">
+        <div class="layui-col-md3">
+<!--            <div class="menu">-->
+<!--                <span>-->
+<!--                    <img src="../../static/imgs/toux.jpg" th:src="@{${user.getImgPath()}}" width="100px" height="100px"-->
+<!--                         style="margin: 0 auto; display: block;border-radius: 50%;"/>-->
+<!--                </span>-->
+<!--                <span th:text="${user.getMeName()}">user</span>-->
+<!--                <span class="highlighted">基本资料</span>-->
+<!--            </div>-->
+        </div>
+        <div class="layui-col-md9">
+            <div class="perInfo">
+                <!-- 个人信息 -->
+                <table style="width: 100%;margin-left: 3px" class="layui-table" lay-skin="nob" lay-size="lg" lay-even="">
+                    <thead>
+                    <tr>
+                        <th colspan="2"><i class="layui-icon layui-icon-user"></i> 个人信息</th>
+                        <th ><a href="javascript:history.go(-1);" class="layui-btn  layui-btn-xs" style="float: right;"> <<返回 </a></th>
+                    </tr>
+                    </thead>
+                    <tbody style="text-align: center">
+                    <tr>
+                        <td><span>头像</span></td>
+                        <td><img src="../../static/imgs/toux.jpg" th:src="@{${user.getImgPath()}}" width="50px" height="50px"
+                                 style="margin: 0 auto; display: block;border-radius: 50%;float: left;"/></td>
+                        <td>
+                            <button type="button" class="layui-btn" id="test1">上传图片</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span>账号</span></td>
+                        <td th:text="${user.getMeId()}" colspan="2">张三</td>
+                    </tr>
+                    <tr>
+                        <td><span>姓名</span></td>
+                        <td th:text="${user.getMeName()}" colspan="2">user</td>
+                    </tr>
+                    <tr>
+                        <td><span>性别</span></td>
+                        <td th:text="${user.getSex()}" colspan="2">男</td>
+                    </tr>
+                    <tr>
+                        <td><span>密码</span></td>
+                        <td>******</td>
+                        <td>
+                            <button id="mm" class="layui-btn">修改</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span>电话</span></td>
+                        <td th:text="${user.getTel() == null}  ? '无电话': |${user.getTel().substring(0,3)}****${user.getTel().substring(7)}|">
+                            151****1234
+                        </td>
+                        <td>
+                            <button id="tel" class="layui-btn">修改</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span>院系</span></td>
+                        <td th:text="${user.getFaculty()}" colspan="2">计算机系</td>
+                    </tr>
+                    <tr>
+                        <td><span>专业班级</span></td>
+                        <td th:text="|${user.getMajor()}-${user.getGrade()}|" colspan="2">软件工程1804</td>
+                    </tr>
+                    <tr>
+                        <td><span>部门</span></td>
+                        <td th:text="${user.getDepartment()}" colspan="2">体育部</td>
+                    </tr>
+                    <tr>
+                        <td><span>角色</span></td>
+                        <td th:text="${user.getPosition()}" colspan="2">成员</td>
+                    </tr>
+                    <tr>
+                        <td><span>加入时间</span></td>
+                        <td th:text="${#dates.format(user.getJoinTime(),'yyyy-MM-dd')}" colspan="2">2022-03-03</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form class="layui-form" method="POST" id="form" style="display: none; margin: 50px 0; ">
+    <div class="layui-form-item" style="display: none;">
+        <label class="layui-form-label">旧密码</label>
+        <div class="layui-input-inline">
+            <input type="password" name="password" required lay-verify="required" placeholder="请输入密码"
+                   autocomplete="off" class="layui-input">
+        </div>
+        <i class="layui-icon layui-icon-ok" style="display: none;"></i>
+    </div>
+    <div class="layui-form-item" style="display: none;">
+        <label class="layui-form-label">新密码</label>
+        <div class="layui-input-inline">
+            <input type="password" name="newPassword" required placeholder="请输入密码" disabled="disabled"
+                   autocomplete="off" class="layui-input" >
+        </div>
+        <i class="layui-icon layui-icon-ok" style="display: none;"></i>
+    </div>
+    <div class="layui-form-item" style="display: none;">
+        <label class="layui-form-label">确认新密码</label>
+        <div class="layui-input-inline">
+            <input type="password" name="truePassword" required placeholder="请输入密码" disabled="disabled"
+                   autocomplete="off" class="layui-input" >
+        </div>
+        <i class="layui-icon layui-icon-ok" style="display: none;"></i>
+    </div>
+
+    <div class="layui-form-item" style="display: none;">
+        <label class="layui-form-label">新手机号</label>
+        <div class="layui-input-inline">
+            <input type="tel" name="newtel" required lay-verify="required|phone" placeholder="请输入手机号" autocomplete="off"
+                   class="layui-input" style="width: 100%;">
+        </div>
+    </div>
+
+</form>
+<script th:inline="javascript">
+    var $;
+    layui.use(['element', 'layer', 'util', 'upload', 'form', 'rate'], function () {
+        var element = layui.element,
+            layer = layui.layer,
+            util = layui.util;
+        $ = layui.$;
+        var upload = layui.upload;
+        var form = layui.form;
+        var rate = layui.rate;
+        var meId = /*[[${user.getMeId()}]]*/ '';
+        //常规使用 - 普通图片上传
+        var uploadInst = upload.render({
+            elem: '#test1',
+            url: '/update/img'
+            ,data : {
+                meId: meId
+            }
+            ,field:"file"
+            , done: function (res) {
+                //如果上传失败
+                if (res.code == 200) {
+                    return  layer.msg(res.msg, {icon: 1,time: 1000 },function(){
+                        window.location.reload()
+                    });
+                }
+            },
+            error: function () {
+                return layer.msg('上传失败');
+            }
+        });
+
+        $('.perInfo .layui-btn:not(:first)').on('click', function () {
+            var update;
+            var str = $(this).text();
+            str += $(this).parent().parent().find("td:eq(0)").text();
+            $("#form .layui-form-item").hide();
+            var id = $(this).attr("id");
+            if (id == "mm") {
+                $("#form .layui-form-item:eq(0)").show();
+                $("#form .layui-form-item:eq(1)").show();
+                $("#form .layui-form-item:eq(2)").show();
+                update =1;
+            }
+            if (id == "tel") {
+                $("#form .layui-form-item:eq(3)").show();
+                $("#form .layui-form-item:eq(4)").show();
+                update =2;
+            }
+
+            layer.open({
+                title: str,
+                type: 1,
+                scrollbar: false,
+                btn: ["提交", "关闭"],
+                btnAlign: 'c',
+                yes: function (index, layero) {
+                    if(update == 1){
+                        if ($("#form input[name='newPassword']").val()){
+                            if($("#form input[name='newPassword']").val() == $("#form input[name='truePassword']").val()){
+                                $("#form input[name='newPassword']").parent().next().attr("style","display: block;color: green;");
+                                $("#form input[name='truePassword']").parent().next().attr("style","display: block;color: green;");
+                                var p = $("#form input[name='newPassword']").val()
+                               ajax("/update/memberInfo",{member:JSON.stringify(getObj(null,p))},"post").then(function (res){
+                                   layer.msg(res.msg,{icon: 1,time: 1000 },function (){
+                                       layer.close(index);
+                                   });
+                               })
+                            }
+                        }else {
+                            $("#form input[name='connewpwd']").parent().next().attr("style","display: block;color:red;");
+                        }
+
+                    }
+                    if(update == 2){
+                        if ($("#form input[name='newtel']").val() != "" ){
+                            var t = $("#form input[name='newtel']").val()
+                            ajax("/update/memberInfo",{member:JSON.stringify(getObj(t,null))},"post").then(function (res){
+                                layer.msg(res.msg,{icon: 1,time: 1000 },function (){
+                                    layer.close(index);
+                                });
+                            })
+                        }else {
+                            layer.msg("不能为空");
+                        }
+                    }
+                },
+                btn2: function (index, layero) {
+                    $("#form input").val("");
+                    layer.close(index);
+                },
+                offset: 'auto',
+                area: ['400px'],
+                content: $("#form")
+            });
+            $(".layui-layer-content").attr("style", "")
+        })
+
+        $(document).on('mouseout', '#form input[name=\'password\']', function() {
+            if ($("#form input[name='password']").val()){
+                var obj ={
+                    meId:meId,
+                    password:$("#form input[name='password']").val()
+                }
+                ajax("/confirmPassword",obj,"post").then(function (res){
+                    if (res.code == 200){
+                        $("#form input[name='password']").parent().next().attr("style","display: block;color:green;");
+                        $("#form input[type='password']").removeAttr("disabled")
+                    }else {
+                        layer.msg(res.msg)
+                        $("#form input[name='password']").parent().next().attr("style","display: block;color:red;");
+                    }
+                })
+            }
+        });
+    })
+    function ajax(url,data,type){
+        return new Promise(function(resolve, reject) {
+            $.ajax({
+                type: type,
+                url: url,
+                data: data,
+                synch:true,
+                dataType:'json',
+                success:function(res){
+                    resolve(res)
+                },
+                error: function(res) {
+                    console.log(res)
+                }
+            });
+        });
+    }
+    function getObj(tel,password){
+        var member = [[${user}]]
+        var obj = {
+            department: member.department,
+            faculty: member.faculty,
+            grade: member.grade,
+            imgPath: member.imgPath,
+            joinTime: member.joinTime,
+            major: member.major,
+            meId: member.meId,
+            meName: member.meName,
+            password: password?password:member.password ,
+            position: member.position,
+            salt: member.salt,
+            sex: member.sex,
+            tel: tel? tel : member.tel
+        }
+        console.log(obj)
+        return obj;
+    }
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sums.dao.MemberMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sums.entity.Member">
+        <id column="me_id" property="meId" />
+        <result column="me_name" property="meName" />
+        <result column="password" property="password" />
+        <result column="salt" property="salt" />
+        <result column="sex" property="sex" />
+        <result column="faculty" property="faculty" />
+        <result column="major" property="major" />
+        <result column="grade" property="grade" />
+        <result column="tel" property="tel" />
+        <result column="department" property="department" />
+        <result column="position" property="position" />
+        <result column="join_time" property="joinTime" />
+        <result column="img_path" property="imgPath" />
+        <result column="department_id" property="departmentId" />
+        <collection property="roles" javaType="List" column="me_id" ofType="com.sums.entity.Role"
+                    select="com.sums.dao.RoleMapper.findByMemberId" />
+    </resultMap>
+    <select id="getMeIdByRole" resultType="string">
+        SELECT m.me_id AS meId FROM member m LEFT JOIN member_role mr ON mr.role_id=#{roleId} WHERE m.me_id=mr.member_id
+            <if test="faculty!=null">
+                and m.faculty=#{faculty}
+            </if>
+    </select>
+
+    <select id="getOneById" resultMap="BaseResultMap">
+        select me_id,me_name,password,salt,sex,faculty,major,grade,tel,department,`position`,join_time,img_path,department_id from member
+            where me_id=#{id};
+    </select>
+
+    <select id="facultyList" resultType="string">
+        SELECT DISTINCT faculty FROM member
+        <where>
+            <if test="faculty ==null">
+                faculty &lt;&gt; ""
+            </if>
+
+            <if test="faculty !=null">
+                faculty = #{faculty}
+            </if>
+        </where>
+    </select>
+
+    <select id="majorList" resultType="string">
+        SELECT DISTINCT major FROM member WHERE faculty = #{faculty}
+    </select>
+    <select id="gradeList" resultType="string">
+        SELECT DISTINCT grade FROM member WHERE major = #{major}
+    </select>
+
+    <select id="getOneByRoleId" resultMap="BaseResultMap">
+        SELECT me_id,me_name,password,salt,sex,faculty,major,grade,tel,department,`position`,join_time,img_path,department_id FROM
+          member m RIGHT JOIN member_role mr ON m.me_id =mr.member_id AND mr.role_id=#{roleId}
+        <where>
+            <if test="depa != null">
+                m.department=#{depa}
+            </if>
+            <if test="faculty !=null">
+               and m.faculty=#{faculty}
+            </if>
+        </where>
+    </select>
+
+    <select id="getMeIdAndMeName" resultType="map">
+        SELECT me_id as meId,me_name as meName FROM member m LEFT JOIN department d ON m.department = d.depa_name WHERE d.depa_id=#{depaId}
+    </select>
+
+
+    <select id="findRoleIdByMeId" resultType="string">
+        select role_id from member_role where member_id=#{meId}
+    </select>
+
+    <delete id="deleteMemberRoleById">
+        delete from member_role where member_id=#{meId}
+    </delete>
+    <delete id="delOneMemberRoleById">
+        delete from member_role where member_id=#{meId} and role_id = #{roleId}
+    </delete>
+
+    <insert id="insertMemberRole">
+        INSERT INTO member_role (member_id,role_id) values
+        <foreach collection="list" item="id"  separator=",">
+            (#{meId}, #{id})
+        </foreach>
+    </insert>
+    <insert id="saveOne">
+        INSERT INTO member_role (member_id,role_id) values
+            (#{meId}, #{roleId})
+    </insert>
+    <select id="getMeIdAndRidByRoleId" resultType="map">
+        select member_id as memberId,role_id as roleId from member_role where role_id = #{roleId}
+    </select>
+
+    <select id="getByMeIdAndRid" resultType="map">
+        select member_id as memberId,role_id as roleId from member_role where member_id=#{meId} and role_id = #{roleId}
+    </select>
+
+    <select id="getRoleIdByMeId" resultType="string">
+        select role_id as roleId from member_role where member_id = #{memberId}
+    </select>
+</mapper>

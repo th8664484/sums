@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head >
+    <meta charset="UTF-8">
+    <title>登录页</title>
+    <link rel="stylesheet" href="../../static/layui/css/layui.css" th:href="@{/layui/css/layui.css}">
+    <script src="../../static/layui/layui.js" th:src="@{/layui/layui.js}"></script>
+    <link rel="shortcut icon" href="../../static/images/favicon.ico" th:href="@{/images/favicon.ico}" type="image/x-icon" />
+    <style>
+        #login{
+            position:fixed;
+            top: 0;
+            left: 0;
+            width:100%;
+            height:100%;
+            min-width: 1000px;
+            z-index:-10;
+            zoom: 1;
+            background-color: #fff;
+            background:url(/imgs/starrySky.jpg) no-repeat;
+            background-size: cover;
+            -webkit-background-size: cover;
+            -o-background-size: cover;
+            background-position: center 0;
+        }
+        #login span{
+            display: block;
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            background: url(/imgs/1.png) center center / 30px 30px;
+            animation: flash 1s alternate infinite;
+            pointer-events: none;
+        }
+        @keyframes flash{
+            0%{ opacity: 0; }
+            100%{ opacity: 1; }
+        }
+        /*#login span:hover{*/
+        /*    transform: scale(2) rotate(180deg) !important;*/
+        /*    transition: all 1s;*/
+        /*}*/
+    </style>
+</head>
+<body id="login">
+    <!-- ${session?.SPRING_SECURITY_LAST_EXCEPTION?.message} security自带的错误提示信息 -->
+<!--    <p th:if="${param.error}" th:text="${session?.SPRING_SECURITY_LAST_EXCEPTION?.message}"></p>-->
+    <div class="layui-card" style="width: 350px;height: 400px;margin:100px auto;opacity: 0.8;z-index: 10">
+        <div class="layui-card-header text-alian">
+            <h2>登录信息</h2>
+        </div>
+        <div class="layui-card-body">
+            <form class="layui-form" th:action="@{/sums/login}" method="post">
+                <table style="line-height: 70px;width: 100%">
+                    <tr>
+                        <td>账&nbsp;&nbsp;&nbsp;号:</td>
+                        <td>
+                            <input type="text" name="username" required lay-verify="required"
+                                   placeholder="请输入学号" autocomplete="off" class="layui-input">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>密&nbsp;&nbsp;&nbsp;码:</td>
+                        <td><input type="password" name="password" required lay-verify="required"
+                                   placeholder="请输入密码" autocomplete="off" class="layui-input"/></td>
+                    </tr>
+                    <tr>
+                        <td>验证码:</td>
+                        <td>
+                            <input type="text" name="code" id="code" required lay-verify="required" placeholder="验证码"
+                                   autocomplete="off" class="layui-input" style="width:150px;float: left;">
+                            <div class="layui-form-mid layui-word-aux"  style="padding: 0 !important; margin-left: 10px">
+                                <img  id="codeImg" th:src="@{/sums/getCodeImage/0}" width="100" height="38"/></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="center">
+                            <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="formDemo"
+                                    style="background-color: #58d3f8 !important;">登录
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+
+</body>
+<script>
+
+</script>
+<script th:inline="javascript">
+    layui.use(['jquery', 'layer', 'form'], function () {
+        var form = layui.form;
+        var $ = layui.$;
+
+        if ([[${message}]]!=null){ layer.msg([[${message}]])}
+        var b = false;
+        $(window).load(function (){
+            if( b ){
+                $("#xx").remove()
+            }
+            // 1.求出屏幕的尺寸
+            var screenW = $(window).width();
+            var screenH =$(window).height();
+            console.log(screenH)
+            console.log(screenW)
+            // 2.动态创建星星
+            for( var i=0; i<150; i++ ){
+                // 2.1随机的坐标
+                var x = parseInt(Math.random() * screenW-50);
+                var y = parseInt(Math.random() * screenH-100);
+                // 2.2随机缩放
+                var scale = Math.random() * 2.5;
+                // 闪烁推迟
+                var rate = Math.random() * 1.5;
+                var style = "left:"+x+"px;top:"+y+"px;transform:scale("+scale+","+scale+");animation-delay:"+rate+"s;";
+
+                // 2.4创建星星
+                var span =$("<span id='xx' style='"+style+"'></span>")
+                $("#login").append(span);
+
+            }
+            b = true;
+        })
+        form.on('submit(formDemo)', function(data){
+            // console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
+            // console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
+            // console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+            $.ajax({
+                type: "post",
+                url: "/sums/login",
+                data: data.field,
+                dataType: "json",
+                success: function (data) {
+
+                    if(data == "SUCCESS"){
+                        window.location.href = "/sums/index";
+                    } else {
+                        // console.log(data)
+                        layer.msg(data);
+                        // return false;
+                    }
+                }
+            });
+            return false;
+         //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+        var s = 1;
+        $("#codeImg").on('click',function (){
+            $("#codeImg").attr("src","/sums/getCodeImage/"+ s++);
+        })
+    });
+</script>
+</html>

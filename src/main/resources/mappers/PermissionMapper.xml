@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sums.dao.PermissionMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sums.entity.Permission">
+        <id column="fun_id" property="funId" />
+        <result column="fun_name" property="funName" />
+        <result column="fun_type" property="funType" />
+        <result column="fun_href" property="funHref" />
+        <result column="fun_auth" property="funAuth" />
+        <result column="pid" property="pid" />
+    </resultMap>
+
+    <select id="findPermsByRoleId" resultMap="BaseResultMap">
+        SELECT p.fun_id,p.fun_name,p.fun_type,p.fun_href,p.fun_auth,p.pid FROM permission p LEFT JOIN
+            role_per rp ON p.fun_id= rp.fun_id WHERE rp.role_id=#{id}
+    </select>
+
+    <update id="alter">
+        ALTER TABLE `permission` AUTO_INCREMENT =1;
+    </update>
+    <select id="findFid" resultType="string">
+        select fun_id as funId from role_per where role_id=#{roleId}
+    </select>
+</mapper>

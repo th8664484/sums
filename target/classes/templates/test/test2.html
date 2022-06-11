@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.staticfile.org/echarts/4.3.0/echarts.min.js"></script>
+
+</head>
+<body>
+<div id="echart" ></div>
+<script>
+  window.onload = function setEchartsPie() {
+        let $el = document.getElementById("echart");
+        let myChart = this.echarts.init($el, '', {
+            width: 300,
+            height: 200,
+        });
+        let total =  1000;
+        let option = {
+            title: {
+                zlevel: 0,
+                text: [
+                    '{value|' + total + '}',
+                    '{name|总人数}',
+                ].join('\n'),
+                rich: {
+                    value: {
+                        color: '#303133',
+                        fontSize: 30,
+                        fontWeight: 'bold',
+                        lineHeight: 30,
+                    },
+                    name: {
+                        color: '#909399',
+                        lineHeight: 10
+                    },
+                },
+                top: 'center',
+                left: '145',
+                textAlign: 'center',
+                textStyle: {
+                    rich: {
+                        value: {
+                            color: '#303133',
+                            fontSize: 30,
+                            fontWeight: 'bold',
+                            lineHeight: 30,
+                        },
+                        name: {
+                            color: '#909399',
+                            lineHeight: 10
+                        },
+                    },
+                },
+            },
+            tooltip: { // 悬停指示
+                trigger: 'item',
+                formatter: "{b}: {c} "
+            },
+            series: [
+                {
+                    name: '访问来源',
+                    type: 'pie',
+                    radius: ['80%', '84%'],
+                    center: [150, '50%'],
+                    stillShowZeroSum: false,
+                    avoidLabelOverlap: false,
+                    zlevel: 1,
+                    label: {
+                        normal: {
+                            padding: [30, 30, 30, 30],
+                            backgroundColor: '#fff',
+                            show: false,
+                            position: 'center',
+                            formatter: [
+                                '{value|{c}}',
+                                '{name|{b}}'
+                            ].join('\n'),
+                            rich: {
+                                value: {
+                                    color: '#303133',
+                                    fontSize: 30,
+                                    fontWeight: 'bold',
+                                    lineHeight: 30,
+                                },
+                                name: {
+                                    color: '#909399',
+                                    lineHeight: 10
+                                },
+                            },
+                        },
+                        emphasis: {
+                            show: true,
+                            textStyle: {
+                                fontSize: '16',
+                                fontWeight: 'bold'
+                            }
+                        }
+                    },
+                    data: [
+                        { value: 300, name: '在线人数' },
+                        { value: 350, name: '离线人数' },
+                    ]
+                }
+            ],
+            color: ['#410ADF','#F42850','#F6A93B','#7ED321','#282828']
+        };
+        myChart.setOption(option);
+    }
+</script>
+</body>
+</html>

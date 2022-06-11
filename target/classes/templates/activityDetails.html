@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/_fragments :: head(~{::title})">
+    <meta charset="UTF-8">
+    <title>活动详情</title>
+    <link href="../static/layui/css/layui.css" rel="stylesheet"/>
+    <link href="../static/css/style.css" rel="stylesheet"/>
+    <script src="../static/layui/layui.js" type="text/javascript"></script>
+</head>
+<style>
+    #img img{
+        width: 700px;
+        height: 350px;
+    }
+</style>
+<body>
+<div class="layui-container layui-row m-top-max ">
+    <div class="layui-card m">
+        <div class="layui-card-header text-alian layui-font-20">
+            <span th:text="${activity.activityName}">学生会招新</span>
+        </div>
+        <div class="layui-card-body">
+            <div class="layui-row">
+                <div class="layui-col-md2 text-c-white">-</div>
+                <div class="layui-col-md8">
+                    <img src="https://picsum.photos/700/300" th:src="@{${activity.imgPath}}" width="700px" height="300px">
+                </div>
+                <div class="layui-col-md2 text-c-white">-</div>
+            </div>
+            <div class="layui-fluid p-clean layui-text m-top-min w-lg" id="img" th:utext="${activity.activityContent}">
+                卡片式面板面板通常用于非白色背景色的主体内
+                卡片式面板面板通常用于非白色背景色的主体内
+                卡片式面板面板通常用于非白色背景色的主体内
+                卡片式面板面板通常用于非白色背景色的主体内.....
+            </div>
+            <div class="text-alian m-top-max">
+                <button class="layui-btn baoMing" th:attr="date=${activity.cutOffTime}">报名</button>
+            </div>
+        </div>
+    </div>
+</div>
+<form id="personalInfo" class="layui-form" th:action="@{/activity/signUp}" method="post"  style="display:none;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">学号</label>
+        <div  class="layui-input-inline">
+            <input type="text" name="meId" required placeholder="学号" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">姓名</label>
+        <div  class="layui-input-inline">
+            <input type="text" name="meName" required placeholder="姓名" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">院系</label>
+        <div  class="layui-input-inline">
+            <select name="faculty" id="info_faculty" required lay-search lay-filter="info_personal">
+                <option value="" selected="">请选择</option>
+                <option ></option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">专业</label>
+        <div  class="layui-input-inline">
+            <select name="major" id="info_major" required lay-search >
+                <option value="" selected="">请选择</option>
+                <option >1</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">班级</label>
+        <div  class="layui-input-inline">
+            <input type="text" name="grade" required placeholder="班级" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="personalBtn">立即提交</button>
+            <button type="button" class="layui-btn layui-btn-primary" onclick="quxiao()">取消</button>
+        </div>
+    </div>
+</form>
+<script th:src="@{/js/select_data.js}"></script>
+<script th:src="@{/js/jquery-2.1.0.js}"></script>
+<script>
+layui.use(['form','layer'],function (){
+    var form = layui.form;
+    var $ = layui.$;
+
+    var url = window.location.href;
+    var activityId =url.substring(url.lastIndexOf("/")+1)
+
+    var curOffTime = new Date($('.baoMing').attr('date'))
+    var myDate = new Date;
+    if(curOffTime.getTime() < myDate.getTime()){
+        $('.baoMing').hide()
+    }
+    var index;
+    $('.baoMing').on('click',function (){
+        index = layer.open({
+            type:1,//5种层类型。可传入的值有：0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
+            scrollbar: false,
+            area: '400px',//宽高
+            title:'个人信息',
+            content:$('#personalInfo'),
+            success:function (){
+                select()
+                form.render('select'); //这个很重要
+            }
+        })
+    })
+    form.on('select(info_personal)', function (data) {
+        console.log(data)
+        selectByName(data.value)
+        form.render('select'); //这个很重要
+    });
+    /**提交form表单*/
+    form.on('submit(personalBtn)', function (data) {
+        var obj = data.field
+        obj.activityId = activityId;
+        ajax(data.form.action, obj, data.form.method).then(function (res) {
+            layer.msg(res.msg, {time: 1000}, function () {
+                layer.close(index);
+                $('#personalInfo').attr("style","display:none");
+            });
+        })
+        return false;
+    });
+
+})
+/**关闭弹窗*/
+function quxiao(){
+    layui.use('layer',function(){
+        var $ = layui.$;
+        var layer = layui.layer ;
+        layer.closeAll();
+        $('#personalInfo').attr("style","display:none");
+    });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+# 启动之后要打开的地址
+open:
+  browser:
+    url: http://localhost:8088/
+
+#预览文件组件的启动地址
+kkFileView:
+  url: D:\kkFileView-4.6.5\bin\
+
+#加盐位数
+salt: 5
+#验证码
+code:
+  width: 100
+  height: 38
+  codeSize: 4
+#文件对外暴露的访问路径
+file:
+  staticAccessPath: /api/file/**
+  #文件上传目录（注意Linux和Windows上的目录结构不同）
+  uploadFolder: D:\gitSorce\sums\src\main\resources\static\file\
+  #默认头像
+  toux: /api/file/toux.jpg
+#开发环境
+IndexController:
+  limit: 10
+#修改项目端口号
+server:
+  port: 8088
+#  servlet:
+#    context-path: /sums
+
+spring:
+#  application:
+#    name: sums
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
+    suffix: .html
+  datasource:
+      type: com.alibaba.druid.pool.DruidDataSource
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/sums?serverTimezone=Asia/Shanghai&characterEncoding=utf-8
+      username: root
+      password: 123456
+  druid:
+    #druid配置
+    # 连接池的配置信息
+    # 初始化大小，最小，最大
+    initial-size: 5
+    min-idle: 5
+    maxActive: 20
+    # 配置获取连接等待超时的时间
+    maxWait: 60000
+    # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+    timeBetweenEvictionRunsMillis: 60000
+    # 配置一个连接在池中最小生存的时间，单位是毫秒
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    # 打开PSCache，并且指定每个连接上PSCache的大小
+    poolPreparedStatements: true
+    maxPoolPreparedStatementPerConnectionSize: 20
+    # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+    filters: stat,wall,log4j
+    # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+    connectionProperties: druid.stat.mergeSql\=true;druid.stat.slowSqlMillis\=5000
+
+
+logging:
+  level:
+    root: error
+    com.sums : debug
+  file:
+    name: log/sums-dev.log
+
+
+mybatis-plus:
+#  global-config:
+#    db-config:
+#      table-prefix: t_
+  mapper-locations:  classpath:mappers/*.xml
+  type-aliases-package: com.sums.entity
+
+#  type-aliases-package: com.sums.entity
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#    map-underscore-to-camel-case: true
+
+

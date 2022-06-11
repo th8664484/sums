@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.w3.org/1999/xhtml">
+<head th:replace="studentUnion/_fragments :: head(~{::title})">
+    <meta charset="UTF-8">
+    <title>公告编辑</title>
+    <script src="../../static/js/jquery-2.1.0.js"></script>
+
+    <link href="../../static/layui/css/layui.css" rel="stylesheet"/>
+    <link href="../../static/css/style.css" rel="stylesheet"/>
+    <script src="../../static/layui/layui.js" type="text/javascript"></script>
+
+    <script src="../../static/editormd/editormd.min.js" ></script>
+    <link rel="stylesheet" href="../../static/editormd/css/editormd.css">
+</head>
+<script th:src="@{/js/jquery-2.1.0.js}"></script>
+<script th:src="@{/editormd/editormd.min.js}"></script>
+<link rel="stylesheet" th:href="@{/editormd/css/editormd.css}">
+<body>
+<div class="layui-container" id="announcements" >
+    <form class="layui-form"  method="post" id="form" th:action="@{${action}}">
+        <input type="hidden" th:attr="name=${attribute[0]}" th:value="${id} " >
+        <div class="layui-row">
+            <div class="layui-col-md9">
+                <div class="layui-form-item">
+                    <label class="layui-form-label" style="padding: 0;">
+                        <div class="layui-label" th:text="${tag}">公告</div>
+                    </label>
+                    <div class="layui-input-block" style="margin-left: 80px;">
+                        <input type="text" th:attr="name=${attribute[1]}" required lay-verify="required" placeholder="请输入标题" th:value="${title}"
+                               autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md3">
+                <div class="layui-form-item" style="text-align: center;" >
+                    <div class="layui-inline" th:if="${edit} == 'y' ">
+                        <button class="layui-btn layui-btn-preservation" lay-submit lay-filter="formDemo">保存</button>
+                    </div>
+                    <div class="layui-inline" th:if="${tag == '活动' && edit =='y'}" shiro:hasAnyRoles="chairman" >
+                        <input type="checkbox" name="transition" lay-filter="transition-switch" lay-skin="switch" lay-text="换届|换届" >
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div id="blogs-input-editormd" style="z-index: 100;">
+               <textarea th:attr="name=${attribute[2]}" placeholder="请输入公告内容" th:utext="${content}"  lay-verify="required" class="layui-textarea">
+[TOC]
+
+#### Disabled options
+
+- TeX (Based on KaTeX);
+- Emoji;
+- Task lists;
+- HTML tags decode;
+- Flowchart and Sequence Diagram;
+               </textarea>
+            </div>
+        </div>
+
+    </form>
+</div>
+</body>
+<script type="text/javascript" >
+    var testEditor;
+    $(function() {
+        testEditor = editormd("blogs-input-editormd", {
+            width   : "100%",
+            height  : 590,
+            syncScrolling : "single",
+            // path    : "../../static/editormd/lib/"
+            path    : "/editormd/lib/",
+
+            emoji: true,//emoji表情，默认关闭
+            taskList: true,
+            tocm: true, // Using [TOCM]
+            tex: true,// 开启科学公式TeX语言支持，默认关闭
+
+            flowChart: true,//开启流程图支持，默认关闭
+            sequenceDiagram: true,//开启时序/序列图支持，默认关闭,
+
+            dialogLockScreen : false,//设置弹出层对话框不锁屏，全局通用，默认为true
+            dialogShowMask : false,//设置弹出层对话框显示透明遮罩层，全局通用，默认为true
+            dialogDraggable : false,//设置弹出层对话框不可拖动，全局通用，默认为true
+            dialogMaskOpacity : 0.4, //设置透明遮罩层的透明度，全局通用，默认值为0.1
+            dialogMaskBgColor : "#b9b6b6",//设置透明遮罩层的背景颜色，全局通用，默认为#fff
+
+            codeFold: true,
+
+            imageUpload : true,
+            imageFormats : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+            imageUploadURL : "/activity/uploadMD",
+
+        });
+    });
+
+</script>
+</html>

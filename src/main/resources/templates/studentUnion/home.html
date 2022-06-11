@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="studentUnion/_fragments :: head(~{::title})">
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <link rel="stylesheet" href="../../static/layui/css/layui.css"/>
+    <link rel="stylesheet" href="../../static/css/style.css"/>
+    <script src="../../static/layui/layui.js" type="text/javascript"></script>
+    <script src="../../static/js/style.js" type="text/javascript"></script>
+</head>
+<body class="home_1">
+<div class="layui-bg-gray home-gray" style="padding: 30px;min-height: 800px;">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md8">
+            <div class="layui-card">
+                <div class="layui-card-header home-header">最新活动</div>
+                <div class="layui-card-body">
+                    <div class="layui-carousel" id="test1">
+                        <div carousel-item >
+                            <div th:each="activity:${activitys}">
+                                <a th:href="@{'/open/'+${activity.activityId}}" target="_blank"><img th:src="@{${activity.imgPath}}" width="1066.33px" height="280px"></a>
+                            </div>
+                            <div th:if="${activitys.size() == 0} ">
+                                <img src="https://picsum.photos/1066/280" width="1066.33px" height="280px"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            <div class="layui-card">
+                <div class="layui-card-header home-header">最新公告</div>
+                <div class="layui-card-body">
+                    <div class="layui-carousel" id="test2">
+                        <div carousel-item>
+                            <div th:each="anno:${annos}">
+                                <table class="notice">
+                                    <tr>
+                                        <td class="title" th:text="${anno.annoTitle}">标题</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="content" ><div th:utext="${anno.annoText}">内容</div></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="publisher" th:text="${anno.meName}">发布人</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="releaseTime" th:text="${#dates.format(anno.annoTime, 'yyyy-MM-dd')}">发布时间</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div th:if="${annos.size()==0}">
+                                <table class="notice">
+                                    <tr>
+                                        <td class="title">标题</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="content" ><div>内容</div></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="publisher" >发布人</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="releaseTime" >发布时间</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <!--
+                            <div>条目2</div>
+                            <div>条目3</div>
+                            <div>条目4</div>
+                            <div>条目5</div>
+                            -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header home-header">学生会部门介绍</div>
+                <div class="layui-card-body" style="overflow: hidden;background-color: #d8d6d6 ;padding: 0;">
+                    <div class="col-md4 peat" th:each="depa:${depas}">
+                        <div class="layui-card">
+                            <div class="layui-card-header home-header" th:text="${depa.depaName}">学生会部门介绍</div>
+                            <div class="layui-card-body" th:text="${depa.minister}">
+                                111111111111111111
+                            </div>
+                        </div>
+                    </div>
+<!--
+                    <div class="col-md4 peat" >
+                        <div class="layui-card">
+                            <div class="layui-card-header home-header">学生会部门介绍</div>
+                            <div class="layui-card-body">
+                                111111111111111111
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md4 peat" >
+                        <div class="layui-card">
+                            <div class="layui-card-header home-header">学生会部门介绍</div>
+                            <div class="layui-card-body">
+                                111111111111111111
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md4 peat" >
+                        <div class="layui-card">
+                            <div class="layui-card-header home-header">学生会部门介绍</div>
+                            <div class="layui-card-body">
+                                111111111111111111
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md4 peat" >
+                        <div class="layui-card">
+                            <div class="layui-card-header home-header">学生会部门介绍</div>
+                            <div class="layui-card-body">
+                                111111111111111111
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md4 peat" >
+                        <div class="layui-card">
+                            <div class="layui-card-header home-header">学生会部门介绍</div>
+                            <div class="layui-card-body">
+                                111111111111111111
+                            </div>
+                        </div>
+                    </div>
+                 */-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

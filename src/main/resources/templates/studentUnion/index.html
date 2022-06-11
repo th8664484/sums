@@ -1,0 +1,194 @@
+<!DOCTYPE html >
+<html  xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:replace="studentUnion/_fragments :: head(~{::title})">
+    <meta charset="utf-8">
+    <title>学生会管理系统</title>
+    <link rel="shortcut icon" href="../../static/images/favicon.ico" type="image/x-icon" />
+    <link href="../../static/layui/css/layui.css" rel="stylesheet" type="text/css" />
+    <link href="../../static/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="../../static/css/style.css" rel="stylesheet"  type="text/css"/>
+    <script src="../../static/layui/layui.js" type="text/javascript"></script>
+    <script src="../../static/js/style.js" type="text/javascript"></script>
+</head>
+<body >
+<div class="layui-layout layui-layout-admin layui-font-18">
+    <div class="layui-header">
+        <div class="layui-logo layui-hide-xs layui-bg-black"><h3>学生会管理</h3></div>
+        <!-- 头部区域（可配合layui 已有的水平导航） -->
+        <ul class="layui-nav layui-layout-left">
+            <li style="line-height: 60px; font-size: 18px;">当前时间：<span class="layui-font-18" id="current-time"></span>
+            </li>
+        </ul>
+
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item layui-hide layui-show-md-inline-block">
+                <a href="javascript:;">
+                    <img th:src="@{${user.imgPath}}" class="layui-nav-img">
+                    <span class="layui-font-18" th:text="${user.meName}"></span>
+                </a>
+                <dl class="layui-nav-child font-size-16">
+                    <dd><a th:href="@{/personalInfo/{meId}(meId=${user.meId})}" target="content">个人信息</a></dd>
+                    <dd shiro:hasAnyRoles="chairman"  th:if="${transition != 0}">
+                        <span id="transition" onclick="transitionChairman('3')" style="color: rgba(0,0,0,0.8);display:block;padding: 0 20px;">换届</span>
+                    </dd>
+                    <dd shiro:hasAnyRoles="vice-chairman" th:if="${transition != 0}">
+                        <span id="transition" onclick="transitionChairman('2')" style="color: rgba(0,0,0,0.8);display:block;padding: 0 20px;">换届</span>
+                    </dd>
+                    <dd><a th:href="@{/sums/logout}" id="logout">退出</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item" lay-header-event="menuRight" lay-unselect shiro:hasAnyRoles="chairman,vice-chairman,minister,member">
+                <a href="javascript:;">
+                    <i class="layui-icon layui-icon-more-vertical"></i>
+                    <span class="layui-badge" id="newMsg" onclick="mewMsg()" style="display: none">9</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree" lay-shrink="all" lay-filter="test">
+                <li class="layui-nav-item layui-nav-itemed layui-this">
+                    <a href="home.html" th:href="@{/home}" target="content" class="layui-font-18">
+                        <i class="fa fa-home fa-fw"></i>&nbsp;首页</a>
+                </li>
+               <li class="layui-nav-item " shiro:hasAnyRoles="admin,chairman">
+                    <a href="javascript:;" class="layui-font-18">
+                        <i class="fa fa-gear fa-fw"></i>&nbsp;系统管理</a>
+                    <dl class="layui-nav-child">
+                        <dd>
+                            <span shiro:hasPermission="system:member:member">
+                            <a href="member.html" th:href="@{/member}" target="content" class="layui-font-16">
+                                <i class="fa fa-id-card-o"></i>&nbsp;成员信息</a>
+                            </span>
+                        </dd>
+                        <dd shiro:hasPermission="system:role:role">
+                            <a href="role.html" th:href="@{/role}" target="content" class="layui-font-16">
+                                <i class="fa fa-user-circle"></i>&nbsp;角色信息</a>
+                        </dd>
+                        <dd shiro:hasPermission="system:permission:permission">
+                            <a href="permission.html" th:href="@{/permission}" target="content" class="layui-font-16">
+                                <i class="fa fa-map-signs"></i>&nbsp;权限信息</a>
+                        </dd>
+                        <dd shiro:hasPermission="system:department:department">
+                            <a href="departments-manage.html" th:href="@{/department}" target="content" class="layui-font-16">
+                                <i class="fa fa-group"></i>&nbsp;部门管理</a>
+                        </dd>
+                        <dd shiro:hasPermission="system:announcement:announcement">
+                            <a href="announcements-manage.html" th:href="@{/announcements}"  target="content" class="layui-font-16">
+                                <i class="fa fa-bullhorn"></i>&nbsp;公告管理</a>
+                        </dd>
+                    </dl>
+               </li>
+                <li class="layui-nav-item " shiro:hasAnyRoles="vice-chairman,minister,member">
+                    <a href="departmentsInfo.html" th:href="@{/departmentsInfo/}" target="content" class="layui-font-18">
+                        <i class="fa fa-users fa-fw"></i> 部门信息
+                    </a>
+                </li>
+                <li class="layui-nav-item " shiro:hasAnyRoles="admin,chairman,vice-chairman,minister,member">
+                    <a href="javascript:;" class="layui-font-18">
+                        <i class="fa fa-file-text fa-fw"></i>&nbsp;日常事务管理</a>
+                    <dl class="layui-nav-child">
+                        <dd shiro:hasPermission="transaction:activity:activity">
+                            <a href="activity.html" th:href="@{/activity/}" target="content" class="layui-font-16">
+                                <i class="fa fa-gamepad "></i> 活动管理</a>
+                        </dd>
+                        <dd shiro:hasPermission="transaction:file:file">
+                            <a href="files.html" th:href="@{/files/}" target="content" class="layui-font-16">
+                                <i class="fa fa-folder "></i> 文件管理</a>
+                        </dd>
+                        <dd shiro:hasPermission="transaction:plan:plan">
+                            <a href="work-project.html" th:href="@{/work/}" target="content" class="layui-font-16">
+                                <i class="fa fa-file-word-o"></i> 计划管理</a>
+                        </dd>
+                    </dl>
+                </li>
+
+                <li class="layui-nav-item " shiro:hasAnyRoles="admin,chairman,vice-chairman,minister,warehouse">
+                    <a class="layui-font-18" href="javascript:;"><i class="fa fa-dropbox fa-fw"></i> 物品管理</a>
+                    <dl class="layui-nav-child">
+                        <dd shiro:hasPermission="goods:borrowed:borrowed">
+                            <a href="borrow-return-records.html" th:href="@{/record/}" target="content" class="layui-font-16"><i class="fa fa-align-left "></i> 借还记录</a>
+                        </dd>
+                        <dd shiro:hasPermission="goods:items:items">
+                            <a href="items-all.html" th:href="@{/items/}" target="content" class="layui-font-16"><i class="fa fa-cubes "></i>全部物品</a>
+                        </dd>
+                    </dl>
+                </li>
+
+                <li class="layui-nav-item " shiro:hasAnyRoles="admin,chairman,vice-chairman,minister">
+                    <a href="message.html" th:href="@{/message/}" target="content" class="layui-font-18">
+                        <!--shiro:hasPermission="system:message:message"-->
+                        <i class="fa fa-envelope-o fa-fw"></i> 消息管理
+                    </a>
+                </li>
+                <li class="layui-nav-item " th:if="${transition != 0 && date != 0}"
+                    shiro:hasAnyRoles="vice-chairman,minister,member">
+                    <a th:href="@{'/activity/'+${activityId}}"  target="content"  class="layui-font-18">
+                         换届报名
+                    </a >
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <div style="height: 100%;z-index: -999; ">
+            <iframe src="home.html" th:src="@{/home}" name="content" width="100%" height="100%" frameborder="0"></iframe>
+        </div>
+    </div>
+
+    <div class="layui-footer" style="height: 75px;line-height: 75px;text-align: center;">
+        <!-- 底部固定区域 -->
+        &copy;xxxx 2022-2222 Student Union Management System.
+    </div>
+    <div id="msg_list" style="padding: 15px;display: none;font-size: 15px;">
+        <div th:fragment="msgList">
+            <ul class="site-doc-icon site-doc-anim" >
+                <li style="margin-bottom: 5px;" th:each="msg :${msgList}" th:attr="class= ${msg.isClick} == 0 ?'newMsg':'',data=${msg.messageId} ">
+                    <div>
+                        <span class="msg_title" th:text="${msg.message.messageTitle}">处理右侧面板的操作222</span>
+                        <a th:attr="data =${msg.message.messageId}" onclick="delMsg(this)" class="layui-btn layui-btn-xs layui-btn-warm" style="margin-left: 30px;">删除</a>
+                    </div>
+                    <div class="msg-text layui-anim" data-anim="layui-anim-scaleSpring" th:text="${msg.message.messageText}">
+                        处理右侧面板的操作222处理右侧面板的操作222处理右侧面板的操作222处理右侧面板的操作222
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<form id="transitionChairman" lay-filter="transitionChairman" style="display:none;">
+    <div class="layui-form-item">
+        <label class="layui-form-label" id="candidate-position">候选人</label>
+        <div  class="layui-input-inline" style="display: flex;flex-direction: column;flex-wrap:wrap;height: 225px;">
+            <input type="radio" name="sex" value="0" title="男">
+            <input type="radio" name="sex" value="1" title="女" checked>
+        </div>
+    </div>
+</form>
+</body>
+<style>
+    .msg-text {
+        background-color: #dbd8d8;
+        display: inline-block;
+        text-indent:2em;
+        font-size: 14px;
+        line-height: 1.6;
+        font-family: "微软雅黑";
+        width: 240px;
+        word-wrap: break-word;
+        word-break: break-all;
+        overflow: hidden;
+        margin: 10px 0 20px 0;
+        display: none;
+    }
+    .newMsg{
+       color: #1E9FFF;
+    }
+</style>
+
+</html>

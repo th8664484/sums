@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sums.dao.RoleMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sums.entity.Role">
+        <id column="role_id" property="roleId" />
+        <result column="role_name" property="roleName" />
+        <result column="description" property="description" />
+    </resultMap>
+
+    <select id="findByMemberId" resultMap="BaseResultMap">
+        SELECT r.role_id,r.role_name,r.description FROM `role` r
+            LEFT JOIN member_role mr ON r.role_id = mr.role_id WHERE mr.member_id=#{mId}
+    </select>
+
+    <update id="alter">
+        ALTER TABLE `role` AUTO_INCREMENT =1;
+    </update>
+
+    <delete id="deleteRolePerById">
+        delete from role_per where role_id=#{roleId}
+    </delete>
+
+    <insert id="updateRoleByFun">
+        INSERT INTO role_per (role_id,fun_id) values
+        <foreach collection="list" item="id"  separator=",">
+                (#{roleId},
+                #{id})
+        </foreach>
+    </insert>
+
+
+
+</mapper>

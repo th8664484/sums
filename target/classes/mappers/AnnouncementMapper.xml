@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sums.dao.AnnouncementMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sums.entity.Announcement">
+        <id column="anno_id" property="annoId" />
+        <result column="anno_title" property="annoTitle" />
+        <result column="anno_text" property="annoText" />
+        <result column="anno_time" property="annoTime" />
+        <result column="me_name" property="meName" />
+    </resultMap>
+    <update id="alter">
+        ALTER TABLE announcement AUTO_INCREMENT =1;
+    </update>
+</mapper>

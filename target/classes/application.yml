@@ -1,0 +1,14 @@
+#修改默认图标
+spring:
+  mvc:
+    favicon:
+      enabled: false
+  profiles:
+    active: dev
+
+
+
+#  日志
+#logging:
+#  level:
+#    root: debug

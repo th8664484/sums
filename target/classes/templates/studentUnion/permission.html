@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:replace="studentUnion/_fragments :: head(~{::title})">
+    <meta charset="UTF-8">
+    <title>权限信息</title>
+    <link href="../../static/layui/css/layui.css" rel="stylesheet" />
+    <script src="../../static/layui/layui.js" type="text/javascript"></script>
+</head>
+<body>
+<!-- 新建功能按钮 -->
+<script type="text/html" id="permissionAddBtn">
+    <button class="layui-btn layui-btn-normal" style="margin: 10px 0 0 10px;" onclick="add({pid:-1,pname:'根菜单'})" shiro:hasPermission="system:permission:add">
+        <i class="layui-icon">&#xe61f;</i>添加功能
+    </button>
+</script>
+<!-- 数据展示位置 -->
+<div id="funGrid"></div>
+<!-- 弹出层中的表单模板 -->
+<th:block th:replace="studentUnion/_fragments :: funTemplate"></th:block>
+<!-- 功能类型 处理后 显示的文本 -->
+<script type="text/html" id="typeText">
+    {{# if(d.funType==1){ }}
+        <span class="layui-badge">菜单</span>
+        {{# }else{ }}
+        <span class="layui-badge layui-bg-green">按钮</span>
+        {{# } }}
+</script>
+<!-- 操作  新建 编辑 删除 按钮 -->
+<script type="text/html" id="rowBtns">
+    {{#   if(d.funType==1){    }}
+        <button type="button" class="layui-btn layui-btn-normal layui-btn-sm " lay-event="add" >
+            <i class="layui-icon">&#xe61f;</i>新建
+        </button>
+        {{#   }else{     }}
+        <button type="button" class="layui-btn layui-btn-normal layui-btn-sm layui-btn-disabled">
+            <i class="layui-icon">&#xe61f;</i>新建
+        </button>
+        {{#   }     }}
+    <button type="button" class="layui-btn layui-btn-sm" lay-event="edit" shiro:hasPermission="system:permission:update">
+        <i class="layui-icon">&#xe642;</i>编辑
+    </button>
+    <button type="button" class="layui-btn layui-btn-danger layui-btn-sm" lay-event="detele" shiro:hasPermission="system:permission:del">
+        <i class="layui-icon">&#xe640;</i>删除
+    </button>
+</script>
+</body>
+<script src="../../static/js/fun.js" th:src="@{/js/fun.js}" type="text/javascript"></script>
+</html>

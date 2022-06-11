@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <title>登录页</title>
+    <link rel="stylesheet" href="../../static/layui/css/layui.css" th:href="@{/layui/css/layui.css}">
+    <script src="../../static/layui/layui.js" th:src="@{/layui/layui.js}"></script>
+    <link rel="shortcut icon" href="../../static/images/favicon.ico" th:href="@{/imgs/favicon.ico}" type="image/x-icon" />
+    <style>
+        html {
+            background: #EBEBEB;
+            height: 100%;
+            font-size: 13px;
+        }
+        strong {
+            color: #f00;
+        }
+        form,p{
+            margin: 0;
+        }
+        body {
+            position: relative;
+            margin: 0;
+            background: #008EAD;
+            height: 60%;
+            margin: 0;
+        }
+
+        body>header {
+            padding-top: 80px;
+        }
+
+        body>section {
+            position: absolute;
+            bottom: -100px;
+            left: 0;
+            right: 0;
+            box-sizing: border-box;
+            width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            z-index: 1;
+        }
+
+        body>footer {
+            text-align: center;
+            position: fixed;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            line-height: 30px;
+        }
+
+        body>header>h1 {
+            margin: 0;
+            color: #fff;
+            font-size: 500%;
+            text-align: center;
+        }
+        .message-box {
+            line-height: 30px;
+        }
+        .form-box {
+            background: white;
+            text-align: center;
+            border-radius: 2px;
+        }
+
+        input.icoTip {
+            border: 1px solid #D3D3D3;
+            border-radius: 5px;
+            padding: 10px 0px 10px 30px;
+            background-repeat: no-repeat;
+            width: 100%;
+            box-sizing: border-box;
+            background-position: 5px center;
+        }
+
+        input.icoTip:focus {
+            border-color: #3333FF;
+            outline: 0;
+        }
+
+        .ico-account {
+            background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAACvElEQVQ4ja2Uz2skVRDHP/W6e0YMGxzYQxJ/4GGRiJdAsruI4Kh4CugloMIikoMgiHoVb7sXd1nYZREUvHjxf4jgQRQNnoQgBEwEE8KYgws6icyM091VUr39Ju2Q6B4sqPe6H6++9a1fj/9bxPGWl5dPhQ0htMzsA+BtMzsP9EMIn6jqh2Z2dJrNvwE+DHwPPGJmf4nIFvCkmZ0DjkTkYpqmOyKCmZ2Q8MUPphX4zsGAN4EHgMvALHDFzGZFZLPdbqftdpumJm45Pz8/ze51EVk3s6vArSoUkUqTJPkxSZLDsixfKcvyT1XdLMuSqFXIKysrJzkQwS8BT5uZONsI5t8hhGpX1TLLst1Wq7XYDDmNIUepvz1Uc+PmuWtRFBV4CGFYFMVcnuf/LGS8rKoTNbN9J9t05JIkCWmaVjvwILDf6IjqPMSfporIjfretdrBhGUt79UdcjMynzj1pdPpTBhkWeaAO6r6moisASMR+QEo6vtvAR8BByGEdSfg1d3b26PX691j6HnwCtWe5szsS2CxLtJ1YAD0atCPazKPmtnXwOMOenx8zGAwOMlhbXwpz/NDVX0xhHAHWAU+BX4DFoDfVfUzM1sVEQ/3WeAXoDvB8GVpaclBn0jT9CevIPBc7X0iZVl6uGVsLS8O8EwI4Vv/Pzg4WBqNRluVdbfbZTgc/prn+byqPpWm6fb0SHlKIphLq9ViPB57ui6EEHZnZmb+UNVOFXK/339HVX1c3i2KYtt77SyJgJ43dzIajX4G1lX1oaIorsbHYQzcNbOFaDAtjTwTp8fD9r0eu/0QwmNxFDLgm+mpaUocv2bYHnJjcja8Z2OV/W17yV+Tsxiexdr7NsuyTFXXRESrUonIq8CGiPSBr+p++0/kEIIVRZGo6gv1w/FGBPwCeNnMbgPP3y/DmD8R6SVJ8j7w+d+yDXpOYfonmAAAAABJRU5ErkJggg==);
+        }
+
+        .ico-password {
+            background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAABQ0lEQVQ4jb3Uv0pcQRQG8J+msxECNim0ELEJWEjEJiA+gIWVWIlvkLR24gOIlc8Q9B1srNJEbQQRLFZFXQ1JzPoHWWVgVpZhZveuhR8cLnPPnO98M+fM8d74hHXs4w8OsYnxt+iYxD88Z6yJ2V7IBvA7Ep1gCV+xENW2kgxVJZyPAZcYTHx9OIr+b2lgf4FwOH534921IxDtxfVEVcJGm5ocdlDHVpeTvmIxKtmuGtBCqmAUq/iCMVzHIqQnecRffMQN1vArl+Cg0Cbd7LSkuNR3wc46+P63CNKjpBUNuMIMRjCFWmbPbUlhLZN9Odkzl9lzUVKYQzP516gQ01HhOaaj/zOOOymsQhjsR/RvFPxFwnohICT6HsdXzh8GSRahym/pw6cW24eENoyqMAfDCwqXf9dm98k62ENsqxX87KVY1YAX2eiXuWVTWrQAAAAASUVORK5CYII=);
+        }
+        .ico-code {
+            background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAABVklEQVQ4jcWTPSjFURjGfxgtBnex+BgoUZKyiTIYTQZZTBYfRVlsl4HpKpNBZJRCShkYbFJmlDLLdz7CQEfPX2/H/9x7XIOnTp3zvs/znI/3PfwHqoAr4BGo/cv+LcAB8AHsA7uaHwHtMQb1wBiwDTxIfAH0GE4ncKLcE7ADjAONvllyEjfOgTldNYQMMA2cGd2h5b6JUCyGgVenLZXBpZkXA6d9toY3QE2kUQ6Y9WKt6oJvrAGnEWZ9eq9+L34MbNnAkKqWD9Uyy6VwXFdM2UCdyN0mNgPsmfW9usFHm7TNfsL13KpZd4m4CawDd4HCLegn/UA2qZRBBXAt46bAc7iCzqclyiUc9eKVQEPAbFCaTCD/dfyXUDIFt8BKIZKr9kaE2RLwDpQVIrbrGtk8nElxXOGi0CtB2kmXlRuINUuQ9JcbE8CIWXf81szC/YzEaBEoCTKBT7/sVLrku0SHAAAAAElFTkSuQmCC);
+        }
+        .form-fields {
+            padding-left:15px;
+            padding-right:15px;
+            padding-top: 10px;
+        }
+        .form-action {
+            border-top: 1px solid #E7E7E7;
+            padding: 10px 15px;
+            display: table;
+            width: 100%;
+            box-sizing: border-box;
+            vertical-align: middle;
+        }
+        .form-fields>p {
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+        .form-action>:first-child {
+            display: table-cell;
+            text-align: left;
+        }
+
+        .form-action>:last-child {
+            display: table-cell;
+            text-align: right;
+        }
+
+        button[type=submit] {
+            background: #008EAD;
+            border: 1px solid #008EaF;
+            color: #fff;
+            border-radius: 5px;
+            font-weight: bold;
+            padding: 10px 15px;
+            cursor: pointer;
+        }
+        button[type=submit]:hover{
+            background: #694530;
+        }
+
+    </style>
+    <style>
+        .eagel-box {
+            text-align: center;
+            position: relative;
+            bottom: -100px;
+            z-index: -1;
+        }
+        .sprt-eagle {
+            background-image: url(/imgs/sprt_eagle.png);
+            background-repeat: no-repeat;
+            display: inline-block;
+            vertical-align: bottom;
+            position: relative;
+        }
+
+        .sprt-eagle.head {
+            height: 91px;
+            width: 97px;
+            background-position: -30px 0px;
+            z-index: 100;
+        }
+        .sprt-eagle.hand-left {
+            height: 20px;
+            width: 30px;
+            background-position: 0px -71px;
+            left: -30px;
+            z-index: 200;
+        }
+        .sprt-eagle.hand-left.hiding {
+            height: 20px;
+            background-position: 0px -37px;
+        }
+        .sprt-eagle.hand-left.hided {
+            height: 37px;
+            background-position: 0px 0px;
+        }
+        .sprt-eagle.hand-right {
+            height: 20px;
+            width: 30px;
+            background-position: 0px -71px;
+            left: 30px;
+            z-index: 200;
+        }
+        .sprt-eagle.hand-right.hiding {
+            height: 20px;
+            background-position: -127px -37px;
+        }
+        .sprt-eagle.hand-right.hided {
+            height: 37px;
+            background-position: -127px 0px;
+        }
+    </style>
+</head>
+<body>
+<div style="text-align: center; padding-top: 20px">
+    <img th:src="@{/imgs/logo.jpg}" width="500" height="100" />
+</div>
+<header>
+    <h1 style="font-family: 华文隶书">学生会管理</h1>
+</header>
+<section>
+    <div class="eagel-box">
+        <i class="sprt-eagle hand-left"></i>
+        <i class="sprt-eagle head"></i>
+        <i class="sprt-eagle hand-right"></i>
+    </div>
+    <div class="form-box">
+
+        <p class="message-box">
+            <strong></strong>
+        </p>
+        <form action="#" method="post">
+            <div class="form-fields">
+                <p>
+                    <input class="icoTip ico-account" required  autoComplete="off"  type="text" name="username" placeholder="账号">
+                </p>
+                <p>
+                    <input class="icoTip ico-password" required  autoComplete="off"  name="password" type="password" placeholder="密码">
+                </p>
+                <p>
+                    <div style="display: flex;">
+                        <input class="icoTip ico-code" required  autoComplete="off" type="text" name="code" placeholder="验证码">
+                        <img th:src="@{/sums/getCodeImage/0}" id="codeImg" width="120" height="43" style="margin-left: 20px;"/>
+                    </div>
+                </p>
+            </div>
+            <div class="form-action">
+						<span></span>
+                <span>
+                    <button type="button" class="layui-btn layui-btn-fluid" lay-submit lay-filter="formDemo" style="background-color: #008ead;">登录</button>
+                </span>
+            </div>
+        </form>
+    </div>
+</section>
+
+<footer>
+    &copy;xxxx 2022-2222 Student Union Management System.
+</footer>
+</body>
+<script type="text/javascript" src="../../static/js/jquery-2.1.0.js" th:src="@{/js/jquery-2.1.0.js}"></script>
+<script>
+    layui.use(['jquery', 'layer', 'form'], function () {
+        var form = layui.form;
+        var $ = layui.$;
+        form.on('submit(formDemo)', function(data){
+            $.ajax({
+                type: "post",
+                url: "/sums/login",
+                data:{
+                    username:$("input[name=username]").val(),
+                    password:$("input[name=password]").val(),
+                    code: $("input[name=code]").val()
+                },
+                dataType: "json",
+                success: function (data) {
+
+                    if(data == "SUCCESS"){
+                        window.location.href = "/sums/index";
+                    } else {
+                        // console.log(data)
+                        layer.msg(data);
+                        // return false;
+                    }
+                }
+            });
+            return false;
+            //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+        var s = 1;
+        $("#codeImg").on('click',function (){
+            $("#codeImg").attr("src","/sums/getCodeImage/"+ s++);
+        })
+    })
+</script>
+<script>
+    var eagleLeftHandEL=$(".hand-left");
+    var eagleRightHandEL=$(".hand-right");
+    var eagleHandHidedStatus=[{left:45,bottom:6},{left:-45,bottom:6}];
+    $("input[type=password]").focus(function(){
+        eagleLeftHandEL.animate(eagleHandHidedStatus[0],{
+            step:hidingStep,
+            duration:500
+        });
+        eagleRightHandEL.animate(eagleHandHidedStatus[1],{
+            step:hidingStep,
+            duration:500,
+            complete:function(){
+                setTimeout(eaglePeek,1000);
+            }
+        });
+    }).blur(function(){
+        //立即结束动画
+        eagleRightHandEL.stop(true,true);
+        eagleLeftHandEL.stop(true,true);
+
+
+        eagleLeftHandEL[0].hideStatus=0;
+        eagleLeftHandEL[0].className="sprt-eagle hand-left";
+        eagleLeftHandEL[0].style="";
+
+        eagleRightHandEL[0].hideStatus=0;
+        eagleRightHandEL[0].className="sprt-eagle hand-right";
+        eagleRightHandEL[0].style="";
+
+    });
+    var eagleShow=function(){
+        $(".eagel-box").animate({
+            bottom:-6
+        },1000,function(){
+            this.style.zIndex=100;
+        });
+    };
+    /**
+     * the hiding step control
+     * @param {Object} now
+     * @param {Object} fx
+     */
+    var hidingStep=function(now,fx){
+        if(fx.prop==="bottom"){
+            now=Math.floor(now);
+            if(now===3&&this.hideStatus!==1){
+                this.classList.add("hiding");
+                this.hideStatus=1;
+            }else if(now===5&&this.hideStatus!==2){
+                this.classList.remove("hiding");
+                this.classList.add("hided");
+                this.hideStatus=2;
+            }
+        }
+    };
+    /**
+     * the eagel peak
+     */
+    var eaglePeek=function(){
+        if(eagleRightHandEL[0].hideStatus===2){
+            eagleRightHandEL.animate({
+                bottom:3,
+                left:-25
+            },300,function(){
+                setTimeout(function(){
+                    if(eagleRightHandEL[0].hideStatus===2){
+                        eagleRightHandEL.animate(eagleHandHidedStatus[1],200);
+                    }
+                },500);
+            });
+        }
+    };
+    eagleShow();
+</script>
+
+</html>

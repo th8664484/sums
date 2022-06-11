@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sums.dao.ActivityMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sums.entity.Activity">
+        <id column="activity_id" property="activityId" />
+        <result column="activity_name" property="activityName" />
+        <result column="activity_content" property="activityContent" />
+        <result column="submit_time" property="submitTime" />
+        <result column="department" property="department" />
+        <result column="audit_status" property="auditStatus" />
+        <result column="process" property="process" />
+        <result column="admin_del" property="adminDel" />
+        <result column="chairman_del" property="chairmanDel" />
+        <result column="approver" property="approver" />
+        <result column="me_id" property="meId" />
+    </resultMap>
+
+</mapper>

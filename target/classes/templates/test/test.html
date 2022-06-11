@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>数据可视化</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+</head>
+<body >
+<div style="margin: 0 auto; width: 500px;">
+    <!-- 图一所占空间 -->
+    <div id="staff_month_orderCount" style="width: 300px;height:300px; margin-bottom: 20px"></div>
+
+    <!-- 图二所占空间 -->
+    <div id="staff_all_orderCount" style="width: 300px;height:300px;"></div>
+
+</div>
+<!--方式一 cdn-->
+<script src="https://cdn.staticfile.org/echarts/4.3.0/echarts.min.js"></script>
+
+<script type="text/javascript">
+    window.onload = function () {
+        echart01();
+        echart02();
+
+        function echart01() {
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById('staff_month_orderCount'),'dark');
+
+            // 指定图表的配置项和数据
+            var option = {
+                title: {
+                    text: '本月员工接单数'
+                },
+                tooltip: {},
+                legend: {
+                    data: ['订单数']
+                },
+                xAxis: {
+                    data: ["小李", "张三", "张星野", "梁帅帅", "周泽田"]
+                },
+                yAxis: {},
+                series: [{
+                    name: '本月订单数',
+                    type: 'bar',
+                    data: [5, 20, 36, 10, 20]
+                }]
+            };
+            // 使用刚指定的配置项和数据显示图表。
+            myChart.setOption(option);
+        }
+
+        function echart02() {
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById('staff_all_orderCount'),"light");
+
+            // 指定图表的配置项和数据
+            var option = {
+                title: {
+                    text: '员工接单总数'
+                },
+                tooltip: {},
+                legend: {
+                    data: ['订单数']
+                },
+                xAxis: {
+                    data: ["小李", "张三", "张星野", "梁帅帅", "周泽田"]
+                },
+                yAxis: {},
+                series: [{
+                    name: '订单总数',
+                    type: 'bar',
+                    data: [102, 230, 289, 161, 150]
+                }]
+            };
+            // 使用刚指定的配置项和数据显示图表。
+            myChart.setOption(option);
+        }
+    }
+</script>
+</body>
+</html>

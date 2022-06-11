@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/_fragments :: head(~{::title})">
+    <meta charset="UTF-8">
+    <title>活动列表</title>
+    <link href="../static/layui/css/layui.css" rel="stylesheet"/>
+    <link href="../static/css/style.css" rel="stylesheet"/>
+    <script src="../static/layui/layui.js" type="text/javascript"></script>
+    <script src="../static/js/style.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="home_body_bj">
+    <ul class="layui-nav layui-bg-opacity" lay-bar="disabled" style="height: 60px;">
+<!--        <li class="layui-nav-item" lay-unselect id="home_login">-->
+<!--            <a href="#" class="text-c-black">登录</a></li>-->
+<!--        <li class="layui-nav-item" lay-unselect id="home_register">-->
+<!--&lt;!&ndash;            <a href="#" class="text-c-black">注册</a>&ndash;&gt;-->
+<!--        </li>-->
+    </ul>
+    <div class="layui-container layui-row m-top-max ">
+        <div class="layui-card m w layui-float-left"  th:each="activity:${activitys}">
+            <div class="layui-card-header text-alian layui-font-20">
+                <a href="#" th:href="@{'/open/'+${activity.activityId}}" target="_blank" th:text="${activity.activityName}">学生会招新</a>
+            </div>
+            <div class="layui-card-body">
+                <div class="layui-fluid p-clean">
+                    <img src="https://picsum.photos/330/160" th:src="@{${activity.imgPath}}" width="330px" height="160px">
+                </div>
+            </div>
+        </div>
+<!--        <div class="layui-card m w layui-float-left">-->
+<!--            <div class="layui-card-header text-alian layui-font-20">-->
+<!--                <a href="#" target="_blank">学生会招新</a>-->
+<!--            </div>-->
+<!--            <div class="layui-card-body">-->
+<!--                <div class="layui-fluid p-clean">-->
+<!--                    <img src="https://picsum.photos/330/160" th:src="@{${imgPath}}" width="330px" height="160px">-->
+<!--                </div>-->
+<!--                <div class="layui-fluid p-clean layui-text m-top-min">-->
+<!--                    卡片式面板面板通常用于非白色背景色的主体内-->
+<!--                    卡片式面板面板通常用于非白色背景色的主体内-->
+<!--                    卡片式面板面板通常用于非白色背景色的主体内-->
+<!--                    卡片式面板面板通常用于非白色背景色的主体内.....-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+    </div>
+</div>
+
+</body>
+
+</html>

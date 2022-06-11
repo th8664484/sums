@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sums.dao.MsgSinkMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sums.entity.MsgSink">
+        <id column="message_id" property="messageId" />
+        <result column="receive_id" property="receiveId" />
+        <result column="is_click" property="isClick" />
+        <collection property="message" column="message_id" ofType="com.sums.entity.Message"
+                    select="com.sums.dao.MessageMapper.getMessageById"/>
+    </resultMap>
+
+    <select id="getMsg" resultMap="BaseResultMap">
+        select message_id,receive_id,is_click from msg_sink where receive_id=#{meId}
+    </select>
+
+    <select id="getIsClickNum" resultType="int">
+        select count(*) from msg_sink where is_click = 0 and receive_id=#{meId}
+    </select>
+
+    <update id="click">
+        update msg_sink set is_click = 1 where message_id = #{messageId} and receive_id = #{meId}
+    </update>
+    <delete id="delMsg">
+        DELETE FROM msg_sink where message_id = #{messageId}
+        <if test="meId != null">
+            and receive_id = #{meId}
+        </if>
+    </delete>
+
+    <insert id="addValues">
+        INSERT INTO msg_sink (message_id,receive_id) values
+        <foreach collection="list" item="id"  separator=",">
+            (#{messageId}, #{id})
+        </foreach>
+    </insert>
+</mapper>

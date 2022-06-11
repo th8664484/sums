@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.w3.org/1999/xhtml">
+<head th:replace="studentUnion/_fragments :: head(~{::title})">
+    <meta charset="UTF-8">
+    <title>活动管理</title>
+    <link href="../../static/layui/css/layui.css" rel="stylesheet"/>
+    <link href="../../static/css/style.css" rel="stylesheet"/>
+    <script src="../../static/layui/layui.js" type="text/javascript"></script>
+</head>
+<body>
+<table class="layui-hide" id="activity" lay-skin="line" lay-even lay-filter="activity"></table>
+
+<script type="text/html" id="toolActivity">
+    <form class="layui-form" lay-filter="activityForm" id="activityForm">
+        <div class="layui-form-item">
+            <div class="layui-input-inline">
+                <button type="button" class="layui-btn layui-btn-normal"
+                        onclick="add({type:'activity'})" shiro:hasPermission="transaction:activity:add">
+                    <i class="layui-icon">&#xe61f;</i>发布活动
+                </button>
+            </div>
+            <div class="layui-input-inline">
+                <input type="text" name="activityName"
+                       placeholder="活动名称" class="layui-input">
+            </div>
+            <div class="layui-input-inline">
+                <input type="text" name="department"
+                       placeholder="部门" class="layui-input">
+            </div>
+            <div class="layui-input-inline">
+                <div class="layui-btn-group">
+                    <span class="layui-btn  " onclick="$('#activityForm')[0].reset()">
+                            <i class="layui-icon layui-icon-refresh-3"></i> 重置
+                        </span>
+                    <span class="layui-btn  layui-bg-blue change" data-type="activity" onclick="ConditionsQuery(this)">
+                            <i class="layui-icon layui-icon-search"></i> 查询
+                        </span>
+                </div>
+            </div>
+        </div>
+    </form>
+</script>
+<script type="text/html" id="barActivity">
+    <a class="layui-btn layui-btn-sm" lay-event="look" shiro:hasPermission="transaction:activity:look">查看</a>
+    {{# var id = meId;}}
+
+    {{# if( d.auditStatus==1 && d.cutOffTime ==null && d.meId== id){ }}
+    <span class="layui-btn layui-btn-sm"  onclick="cutOffTime('{{d.activityId}}')" >截止时间</span>
+    {{# } }}
+
+    {{# if( d.auditStatus==1 && d.meId== id && d.cutOffTime !=null && d.imgPath != null ){ }}
+    <button class="layui-btn layui-btn-sm" onclick="apply({activityId:'{{d.activityId}}'})">报名情况</button>
+    {{# } }}
+
+    {{# if( d.meId== id ){ }}
+    <a class="layui-btn layui-btn-sm" lay-event="edit" shiro:hasPermission="transaction:activity:update">编辑</a>
+    {{# } }}
+
+    {{# if( d.auditStatus==1 && d.meId== id && d.imgPath == null ){ }}
+    <button class="layui-btn layui-btn-sm" onclick="popupwin({tit:'上传宣传图',activityId:'{{d.activityId}}'},'prop')">上传图片</button>
+    {{# } }}
+
+    {{# var roleId = role;}}
+    {{# if( (roleId.indexOf(2)!=-1 && d.process==1 && d.auditStatus==0)|| (roleId.indexOf(6)!=-1 && d.process==0 && d.auditStatus==0) || (roleId.indexOf(1)!=-1 && d.process==2 && d.auditStatus==0)){ }}
+    <button class="layui-btn layui-btn-sm" lay-event="through" shiro:hasPermission="transaction:activity:through">通过</button>
+    <button class="layui-btn layui-btn-sm" lay-event="reject" shiro:hasPermission="transaction:activity:reject">驳回</button>
+    <button class="layui-btn layui-btn-sm" lay-event="submit" shiro:hasPermission="transaction:activity:submit">提交</button>
+    {{# } }}
+
+    {{# if(d.meId== id || d.auditStatus==1 || d.auditStatus==-1){ }}
+    <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del" shiro:hasPermission="transaction:activity:del">
+        <i class="layui-icon layui-icon-delete"></i>删除</a>
+    {{# } }}
+</script>
+<div id="propagandaDiv" style="display: none">
+    <div class="layui-upload" style="text-align: center">
+        <button type="button" class="layui-btn" id="propaganda">上传图片</button>
+        <div class="layui-upload-list" style="width: 100%;height: 200px;">
+            <img class="layui-upload-img" id="demo1" width="400px" height="200px">
+            <p id="demoText"></p>
+        </div>
+        <div style="padding-top: 10px;">
+            <div class="layui-progress layui-progress-big" lay-showpercent="yes" lay-filter="demo">
+                <div class="layui-progress-bar" lay-percent=""></div>
+            </div>
+        </div>
+    </div> <a name="list-progress"> </a>
+    <div style="margin-top: 10px;">
+
+    </div>
+</div>
+<div id="enrollmentInfo" style="display: none">
+    <div th:fragment="enrollmentList">
+        <table class="layui-table" lay-even lay-skin="nob" lay-size="lg" id="excTable" style="text-align: center">
+            <thead>
+                <tr class="not">
+                    <th colspan="7">
+                        <button class="layui-btn layui-btn-sm" onclick="etest()">导出</button>
+                    </th>
+                </tr>
+                <tr>
+                   <th>学号</th>
+                   <th>姓名</th>
+                   <th>院系</th>
+                   <th>专业</th>
+                   <th>班级</th>
+                   <th>电话</th>
+                   <th>报名时间</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="item:${EnrollmentInfo}">
+                    <td th:text="${item.meId}"></td>
+                    <td th:text="${item.meName}"></td>
+                    <td th:text="${item.faculty}"></td>
+                    <td th:text="${item.major}"></td>
+                    <td th:text="${item.grade}"></td>
+                    <td th:text="${item.tel}"></td>
+                    <td th:text="${#dates.format(item.signUpTime, 'yyyy-MM-dd HH:mm')}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script type="text/javascript" th:src="@{/js/jquery-2.1.0.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.table2excel.min.js}"></script>
+<script th:inline="javascript">
+    var meId = /*[[${meId}]]*/ 'Sebastian';
+    var roles = /*[[${roles}]]*/ 'Sebastian';
+    var role = []
+    for(var i = 0 ; i<roles.length;i++){
+        role.push(roles[i].roleId)
+    }
+    function etest() {
+        $("#excTable").table2excel({
+            exclude: ".not",
+            name: "Excel Document Name.xlsx",
+            filename: "活动报名信息表",
+            exclude_img: false,
+            exclude_links: false,
+            exclude_inputs: false
+        });
+    }
+
+</script>
+</body>
+</html>

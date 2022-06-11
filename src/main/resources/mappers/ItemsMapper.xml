@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sums.dao.ItemsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sums.entity.Items">
+        <id column="item_id" property="itemId" />
+        <result column="item_name" property="itemName" />
+        <result column="buy_date" property="buyDate" />
+        <result column="price" property="price" />
+        <result column="item_number" property="itemNumber" />
+        <result column="lent_number" property="lentNumber" />
+        <result column="item_describe" property="itemDescribe" />
+    </resultMap>
+
+</mapper>

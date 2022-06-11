@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.w3.org/1999/xhtml">
+<head th:replace="studentUnion/_fragments :: head(~{::title})">
+    <meta charset="UTF-8">
+    <title>消息管理</title>
+    <link rel="stylesheet" href="../../static/layui-formSelects/formSelects-v4.css" />
+    <link href="../../static/layui/css/layui.css" rel="stylesheet"/>
+    <link href="../../static/css/style.css" rel="stylesheet"/>
+    <script src="../../static/layui/layui.js" type="text/javascript"></script>
+
+</head>
+<body>
+<table class="layui-hide" id="message" lay-skin="line" lay-even lay-filter="message"></table>
+
+<script type="text/html" id="toolMessage">
+    <form class="layui-form" lay-filter="msgForm" id="msgForm">
+        <div class="layui-form-item">
+            <div class="layui-input-inline">
+                <button type="button" class="layui-btn layui-btn-normal"
+                        onclick="add({type:'msg'})" shiro:hasPermission="message:add:*">
+                    <i class="layui-icon">&#xe61f;</i>发送消息
+                </button>
+            </div>
+            <div class="layui-input-inline">
+                <input type="text" name="messageTitle_"
+                       placeholder="标题" class="layui-input">
+            </div>
+            <div class="layui-input-inline">
+                <div class="layui-btn-group">
+                    <span class="layui-btn " onclick="$('#msgForm')[0].reset()">
+                            <i class="layui-icon layui-icon-refresh-3"></i> 重置
+                        </span>
+                    <span class="layui-btn  layui-bg-blue" data-type="msg" onclick="ConditionsQuery(this)">
+                            <i class="layui-icon layui-icon-search"></i> 查询
+                        </span>
+                </div>
+            </div>
+        </div>
+    </form>
+</script>
+<script type="text/html" id="barMessage">
+    <a class="layui-btn layui-btn-sm" lay-event="edit" shiro:hasPermission="message:look:*">查看</a>
+    <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del" shiro:hasPermission="message:del:*"><i class="layui-icon layui-icon-delete"></i>
+    </a>
+</script>
+
+<!-- 弹出层中的表单模板 -->
+<th:block th:replace="studentUnion/_fragments :: msgTemplate"></th:block>
+
+
+</body>
+
+</html>

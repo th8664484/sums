@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.w3.org/1999/xhtml">
+<head th:replace="studentUnion/_fragments :: head(~{::title})">
+    <meta charset="UTF-8">
+    <title>公告管理</title>
+    <link href="../../static/layui/css/layui.css" rel="stylesheet"/>
+    <link href="../../static/css/style.css" rel="stylesheet"/>
+    <script src="../../static/layui/layui.js" type="text/javascript"></script>
+
+</head>
+<body>
+<table class="layui-hide" id="anno" lay-skin="line" lay-even lay-filter="anno"></table>
+
+<script type="text/html" id="toolAnno">
+    <form class="layui-form" lay-filter="annoForm" id="annoForm">
+        <div class="layui-form-item">
+            <div class="layui-input-inline">
+                <button type="button" class="layui-btn layui-btn-normal"
+                        onclick="add({type:'anno'})" shiro:hasPermission="system:announcement:add">
+                    <i class="layui-icon">&#xe61f;</i>发布
+                </button>
+            </div>
+            <div class="layui-input-inline">
+                <input type="text" name="annoTitle"
+                       placeholder="公告名称" class="layui-input">
+            </div>
+            <div class="layui-input-inline">
+                <input type="text" name="meName"
+                       placeholder="发布人" class="layui-input">
+            </div>
+            <div class="layui-input-inline">
+                <div class="layui-btn-group">
+                    <span class="layui-btn " onclick="$('#annoForm')[0].reset()">
+                            <i class="layui-icon layui-icon-refresh-3"></i> 重置
+                        </span>
+                    <span class="layui-btn  layui-bg-blue change" data-type="anno" onclick="ConditionsQuery(this)">
+                            <i class="layui-icon layui-icon-search"></i> 查询
+                        </span>
+                </div>
+
+            </div>
+        </div>
+    </form>
+</script>
+<script type="text/html" id="barMember">
+    <a class="layui-btn layui-btn-primary layui-btn-sm" lay-event="look" shiro:hasPermission="system:announcement:look">
+        <i class="fa fa-eye"></i>查看</a>
+
+    <a class="layui-btn layui-btn-sm" lay-event="edit" shiro:hasPermission="system:announcement:update">
+        <i class="layui-icon layui-icon-edit"></i>编辑</a>
+
+    <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del" shiro:hasPermission="system:announcement:del">
+        <i class="layui-icon layui-icon-delete"></i>
+        删除</a>
+</script>
+
+</body>
+
+</html>

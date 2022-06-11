@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sums.dao.DepartmentMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sums.entity.Department">
+        <id column="depa_id" property="depaId" />
+        <result column="depa_name" property="depaName" />
+        <result column="minister" property="minister" />
+    </resultMap>
+
+    <update id="alter">
+        ALTER TABLE department AUTO_INCREMENT =1;
+    </update>
+
+    <select id="getDepartmentName" resultType="map">
+        select depa_id as depaId , depa_name as depaName from department
+    </select>
+</mapper>
