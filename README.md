@@ -97,7 +97,7 @@ layui
 在application-dev.yml文件配置文件的保存路径、预览文件依赖的启动路径和数据库访问路径及数据库账号、数据库密码。
 完成后进入src/main/java/com/sums/中，运行SumsApplication类。
 系统访问
-系统启动成功后后自动打开http://localhost:8088/sums/loginView，这是学生会成员的登录入口。如图16。
+系统启动成功后后自动打开`http://localhost:8088/sums/loginView`，这是学生会成员的登录入口。如图16。
 ![输入图片说明](https://images.gitee.com/uploads/images/2022/0611/215318_45504b29_9173820.png "图片1.png")
 输入账号密码 10011/123456点击登录，进入系统页面。如图17。
 ![输入图片说明](https://images.gitee.com/uploads/images/2022/0611/215356_7f6571b8_9173820.png "图片2.png")
