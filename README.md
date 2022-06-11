@@ -9,33 +9,83 @@ layui
 
 #### 软件架构
 软件架构说明
----------sums\n
-    |
-    |----log 
-    |
-    |----src/main
-       |
-       |------java
-         |
-         |-----com/sums
-         |
-         |--------annotations
-         |--------aspect
-         |--------config
-         |--------controller
-         |--------dao
-         |--------entity
-         |--------service
-         |--------shiro
-         |--------utils
-         |
-       |------resources
-         |
-         |-----mappers
-         |-----static
-         |-----templates
-    
-           
+\```
+
+.
+│          
+├─log
+│      
+├─src
+│  ├─main
+│  │  ├─java
+│  │  │  └─com
+│  │  │      └─sums
+│  │  │          │  
+│  │  │          ├─annotations
+│  │  │          │      
+│  │  │          ├─aspect
+│  │  │          │      
+│  │  │          ├─config
+│  │  │          │      
+│  │  │          ├─controller
+│  │  │          │      
+│  │  │          ├─dao
+│  │  │          │      
+│  │  │          ├─entity
+│  │  │          │      
+│  │  │          ├─service
+│  │  │          │  │  
+│  │  │          │  ├─factory
+│  │  │          │  │      
+│  │  │          │  ├─impl
+│  │  │          │  │      
+│  │  │          │  └─roles
+│  │  │          │      │  
+│  │  │          │      └─impl
+│  │  │          │              
+│  │  │          ├─shiro
+│  │  │          │      
+│  │  │          └─utils
+│  │  │                  
+│  │  └─resources
+│  │      │  application-dev.yml
+│  │      │  application.yml
+│  │      │  banner.txt
+│  │      │  
+│  │      ├─mappers
+│  │      │      
+│  │      ├─static
+│  │      │  ├─css
+│  │      │  │      style.css
+│  │      │  │      
+│  │      │  ├─editormd
+│  │      │  │       
+│  │      │  ├─file
+│  │      │  │      
+│  │      │  ├─font-awesome
+│  │      │  │          
+│  │      │  ├─imgs
+│  │      │  │      
+│  │      │  ├─js
+│  │      │  │      
+│  │      │  ├─layui
+│  │      │  │          
+│  │      │  ├─layui-formSelects
+│  │      │  │      
+│  │      │  └─treetable-lay
+│  │      │          
+│  │      └─templates
+│  │          │  activityDetails.html
+│  │          │  homepage.html
+│  │          │  _fragments.html
+│  │          │  
+│  │          ├─error
+│  │          │      4xx.html
+│  │          │      
+│  │          ├─studentUnion
+│  │          │      ****.html
+│  │          │      
+
 
 
 #### 安装教程
